@@ -1,0 +1,28 @@
+Steps required to run experiments on multiple AWS instances:
+
+1. Create IAM user to be able to access AWS console.
+2. Install AWS client on your local machine (ubuntu) : sudo apt install awscli
+3. Install boto3 : pip install boto3
+4. Run 'aws configure' command. You need Access Key Id and Secret access key to configure aws. This can be created in https://console.aws.amazon.com/iam/home#/home
+5. Then you can write a python script (ex below) and run the script on your local machine.
+
+import boto3
+import botocore
+import paramiko
+
+key = paramiko.RSAKey.from_private_key_file("./hybrid.pem")
+client = paramiko.SSHClient()
+client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+# Connect/ssh to an instance
+
+# Here 'ubuntu' is user name and 'instance_ip' is public IP of EC2
+client.connect(hostname="13.56.165.174", username="ubuntu", pkey=key)
+
+# Execute a command(cmd) after connecting/ssh to an instance
+stdin, stdout, stderr = client.exec_command('echo "hello world"')
+print stdout.read()
+
+# close the client connection once the job is done
+client.close()
+
