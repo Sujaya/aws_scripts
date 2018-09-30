@@ -8,7 +8,7 @@ for instance in ec2.instances.all():
     name = ''
     tags = {}
     for tag in instance.tags:
-        if tag['Key'] == 'Type' and tag['Value'] == 'Hybrid':
+        if tag['Key'] == 'Type' and (tag['Value'] == 'Hybrid' or tag['Value'] == 'Hybrid-client'):
         	instances.append(instance.instance_id)
 
 ec2 = boto3.client('ec2', region_name=region)
